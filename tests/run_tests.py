@@ -26,9 +26,6 @@ TESTS = [
     ('Trace.MaskToGrid(numToByte(0) & numToByte(255) & numToByte(255) & numToByte(0), 2, 2)', '01\n10'),
     ('Trace.Offset("1,1" & return & return & "2,3", 10, 20)', '11,21\n\n12,23'),
     ('Trace.Scale("1,1" & return & return & "2,3", 8)', '8,8\n\n16,24'),
-    ('Trace.GridToMap(%s)' % grid('11', '10'),
-     '1,1,floor\n1,1,roof\n1,1,north\n1,1,west\n2,1,floor\n2,1,roof\n2,1,north\n2,1,south\n2,1,east\n'
-     '1,2,floor\n1,2,roof\n1,2,south\n1,2,east\n1,2,west'),
 ]
 
 

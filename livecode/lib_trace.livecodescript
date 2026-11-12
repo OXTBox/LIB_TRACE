@@ -1,6 +1,6 @@
 script "LIB_TRACE"
--- LIB_TRACE: bitmap -> shapes. Outline tracing (bitmap to polygon points) and
--- grid to 3D map (which cells get floors, roofs and walls).
+-- LIB_TRACE: bitmap -> shapes. Outline tracing: bitmap to polygon points.
+-- (Grid to 3D map moved to LIB_MAP: Map.Pieces.)
 -- Pure handlers: data in, data out; no globals, custom properties, graphics or screen.
 --
 --   start using stack "<path>/LIB_TRACE/livecode/lib_trace.livecodescript"
@@ -13,8 +13,8 @@ script "LIB_TRACE"
 -- Points are LiveCode's polygon format: one "x,y" per line, 1-based pixel positions,
 -- an empty line between separate outlines.
 --
--- From the owner's bitmap tracer (radial sweep contour following; textToMap), made pure.
--- Handlers: Trace.Contours, Trace.MaskToGrid, Trace.Offset, Trace.Scale, Trace.GridToMap
+-- From the owner's bitmap tracer (radial sweep contour following), made pure.
+-- Handlers: Trace.Contours, Trace.MaskToGrid, Trace.Offset, Trace.Scale
 
 -------------------------------------------------------------------- outline tracing
 
@@ -167,30 +167,3 @@ function Trace.Scale pPoints, pScale
    delete the last char of tOut
    return tOut
 end Trace.Scale
-
--------------------------------------------------------------------- grid to 3D map
-
--- One line per piece of a 3D level built from a grid (the tracer's textToMap):
---   col,row,floor   col,row,roof   for every filled cell
---   col,row,north / south / east / west   for every side of a filled cell that faces an
---   empty cell or the edge of the grid
--- Rows grow southward, columns eastward. Feed it to xt3d (or raylib's GenMeshCubicmap).
-function Trace.GridToMap pGrid
-   local tH, tW, tRowNo, tCol, tOut, tRow
-   put the number of lines of pGrid into tH
-   repeat with tRowNo = 1 to tH
-      put line tRowNo of pGrid into tRow
-      put the number of chars of tRow into tW
-      repeat with tCol = 1 to tW
-         if char tCol of tRow is "0" then next repeat
-         put tCol & "," & tRowNo & ",floor" & return after tOut
-         put tCol & "," & tRowNo & ",roof" & return after tOut
-         if tRowNo = 1 or char tCol of line tRowNo - 1 of pGrid is "0" then put tCol & "," & tRowNo & ",north" & return after tOut
-         if tRowNo = tH or char tCol of line tRowNo + 1 of pGrid is "0" then put tCol & "," & tRowNo & ",south" & return after tOut
-         if tCol = tW or char tCol + 1 of tRow is "0" then put tCol & "," & tRowNo & ",east" & return after tOut
-         if tCol = 1 or char tCol - 1 of tRow is "0" then put tCol & "," & tRowNo & ",west" & return after tOut
-      end repeat
-   end repeat
-   delete the last char of tOut
-   return tOut
-end Trace.GridToMap
