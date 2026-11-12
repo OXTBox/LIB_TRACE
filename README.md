@@ -26,7 +26,7 @@ set the points of graphic "outline" to Trace.Offset(Trace.Contours(tGrid), the l
 
 ## From the owner's bitmap tracer
 
-`~/projects/bitmap_trace_animate`: the radial-sweep tracer (`doTrace`/`radialSweep`) and
+`~/projects/xtalk_py/corpus/originals/BITMAPVECTORTRACER_Livecode_Stack_Script.txt`: the radial-sweep tracer (`doTrace`/`radialSweep`) and
 `textToMap`, made pure. Differences from the original:
 - the sweep table is built in, not read from a custom property
 - an angle of 360 is treated as 0 (it would have found no table entry)
